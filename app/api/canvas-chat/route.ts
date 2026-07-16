@@ -22,11 +22,11 @@ interface ModelDef {
 }
 
 const MODEL_REGISTRY: Record<string, ModelDef> = {
-  "gemini-2.0": {
-    id: "gemini-2.0",
-    displayName: "Gemini 2.0",
-    provider: "gemini",
-    providerModel: "gemini-2.5-flash",
+  "gemma-3-27b": {
+    id: "gemma-3-27b",
+    displayName: "Gemma 3 27B",
+    provider: "openrouter",
+    providerModel: "google/gemma-3-27b-it",
   },
   "gpt-4o": {
     id: "gpt-4o",
@@ -51,6 +51,18 @@ const MODEL_REGISTRY: Record<string, ModelDef> = {
     displayName: "Llama 3",
     provider: "openrouter",
     providerModel: "meta-llama/llama-3.1-70b-instruct",
+  },
+  "gemini-2.0": {
+    id: "gemini-2.0",
+    displayName: "Gemma 3 27B (Legacy Alias)",
+    provider: "openrouter",
+    providerModel: "google/gemma-3-27b-it",
+  },
+  "gemini-2.5-flash": {
+    id: "gemini-2.5-flash",
+    displayName: "Gemma 3 27B (Legacy Alias)",
+    provider: "openrouter",
+    providerModel: "google/gemma-3-27b-it",
   },
 };
 
@@ -77,7 +89,7 @@ Key behaviors:
 async function callGemini(
   messages: { role: string; content: string }[],
   systemPrompt: string,
-  modelStr: string = "gemini-2.5-flash"
+  modelStr: string = "gemma-3-27b-it"
 ): Promise<string> {
   const model = genAI.getGenerativeModel({ model: modelStr });
 
@@ -224,7 +236,7 @@ export async function POST(request: NextRequest) {
     const {
       message,
       variant = "standard",
-      models = ["gemini-2.0"],
+      models = ["gemma-3-27b"],
       conversationHistory = [],
     } = body;
 
@@ -260,7 +272,7 @@ export async function POST(request: NextRequest) {
 
     // ─── STANDARD MODE ───────────────────────────────────────────
     if (variant === "standard") {
-      const modelId = models[0] || "gemini-2.0";
+      const modelId = models[0] || "gemma-3-27b";
       const result = await callModel(modelId, messages, SYSTEM_PROMPT);
       modelResponses = [
         {
@@ -275,7 +287,7 @@ export async function POST(request: NextRequest) {
     //  Call up to N models in parallel and return all results.
     else if (variant === "multi-model") {
       const selectedModels =
-        models.length > 0 ? models : ["gemini-2.0", "gpt-4o", "claude-3.5"];
+        models.length > 0 ? models : ["gemma-3-27b", "gpt-4o", "claude-3.5"];
 
       const results = await Promise.allSettled(
         selectedModels.map((id) => callModel(id, messages, SYSTEM_PROMPT))
@@ -347,7 +359,7 @@ Return the array with exactly ${rawResponses.length} numbers. No other text.`;
         const judgeResult = await callGemini(
           [{ role: "user", content: judgingPrompt }],
           "You are a scoring judge. Return ONLY a JSON array of integers.",
-          "gemini-2.5-flash"
+          "gemma-3-27b-it"
         );
 
         // Parse scores

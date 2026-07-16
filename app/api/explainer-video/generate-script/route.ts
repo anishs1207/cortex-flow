@@ -42,14 +42,9 @@ Rules:
 
 Write the script now:`;
 
-    // Step 4: Fallback chain across models to avoid quota (429) or support (404) issues.
-    // gemini-2.0-flash is current best fast model.
     const MODELS_TO_TRY = [
-      "gemini-2.5-flash",        // User requested
-      "gemini-2.0-flash",        // Current stable fast
-      "gemini-1.5-flash-latest", // Standard fallback
-      "gemini-1.5-flash",        // Standard fallback 2
-      "gemini-1.5-pro",          // High quality fallback
+      "gemini-2.5-flash",      
+  
     ];
 
     let scriptText = "";

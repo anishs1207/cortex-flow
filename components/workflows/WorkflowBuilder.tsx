@@ -107,7 +107,7 @@ const LS_WORKFLOWS = "workflows";
 const LS_RUNS = "workflow-runs";
 
 const AVAILABLE_MODELS = [
-    { id: "gemini-2.0", name: "Gemini 2.0" },
+    { id: "gemma-3-27b", name: "Gemma 3 27B" },
     { id: "gpt-4o", name: "GPT-4o" },
     { id: "claude-3.5", name: "Claude 3.5" },
     { id: "deepseek", name: "DeepSeek" },
@@ -308,7 +308,7 @@ function WorkflowNode({ id, data, selected }: { id: string; data: WorkflowNodeDa
                                 <Sparkles className="w-3 h-3" /> AI Model
                             </label>
                             <select
-                                value={data.modelId || "gemini-2.0"}
+                                value={data.modelId || "gemma-3-27b"}
                                 onChange={(e) => updateField("modelId", e.target.value)}
                                 className="w-full bg-muted/40 border-muted rounded-md px-2 py-1 text-xs outline-none focus:ring-1 ring-primary appearance-none cursor-pointer"
                             >
@@ -486,9 +486,9 @@ export default function WorkflowBuilder() {
     const [redoHistory, setRedoHistory] = useState<{ nodes: RFNode<WorkflowNodeData>[]; edges: RFEdge[] }[]>([]);
 
     const pushToHistory = useCallback(() => {
-        setHistory((prev) => [...prev.slice(-19), { 
-            nodes: JSON.parse(JSON.stringify(nodes)), 
-            edges: JSON.parse(JSON.stringify(edges)) 
+        setHistory((prev) => [...prev.slice(-19), {
+            nodes: JSON.parse(JSON.stringify(nodes)),
+            edges: JSON.parse(JSON.stringify(edges))
         }]);
         setRedoHistory([]);
     }, [nodes, edges]);
@@ -496,9 +496,9 @@ export default function WorkflowBuilder() {
     const undo = useCallback(() => {
         if (history.length === 0) return;
         const prev = history[history.length - 1];
-        setRedoHistory((r) => [...r, { 
-            nodes: JSON.parse(JSON.stringify(nodes)), 
-            edges: JSON.parse(JSON.stringify(edges)) 
+        setRedoHistory((r) => [...r, {
+            nodes: JSON.parse(JSON.stringify(nodes)),
+            edges: JSON.parse(JSON.stringify(edges))
         }]);
         setNodes(prev.nodes as any);
         setEdges(prev.edges);
@@ -508,9 +508,9 @@ export default function WorkflowBuilder() {
     const redo = useCallback(() => {
         if (redoHistory.length === 0) return;
         const next = redoHistory[redoHistory.length - 1];
-        setHistory((h) => [...h, { 
-            nodes: JSON.parse(JSON.stringify(nodes)), 
-            edges: JSON.parse(JSON.stringify(edges)) 
+        setHistory((h) => [...h, {
+            nodes: JSON.parse(JSON.stringify(nodes)),
+            edges: JSON.parse(JSON.stringify(edges))
         }]);
         setNodes(next.nodes as any);
         setEdges(next.edges);
@@ -615,11 +615,11 @@ export default function WorkflowBuilder() {
                     isNoteNode: kind === "note",
                     startInput: "",
                     noteText: "",
-                    modelId: "gemini-2.0"
+                    modelId: "gemma-3-27b"
                 },
             };
             //@ts-expect-error - React Flow nodes state mismatch with custom data structure
-             setNodes((nds) => [...nds, newNode]);
+            setNodes((nds) => [...nds, newNode]);
         },
         [reactFlowInstance, setNodes, pushToHistory]
     );
@@ -842,7 +842,7 @@ export default function WorkflowBuilder() {
                     body: JSON.stringify({
                         message: userPrompt,
                         variant: "standard",
-                        models: [node.data.modelId || "gemini-2.0"],
+                        models: [node.data.modelId || "gemma-3-27b"],
                         conversationHistory: [
                             { role: "system", content: node.data.systemPrompt },
                         ],
@@ -865,7 +865,7 @@ export default function WorkflowBuilder() {
 
                     // Process children sequentially with condition handling
                     const allChildren = childMap[nodeId] || [];
-                    
+
                     if (node.data.isConditionNode) {
                         // AI-powered condition checking
                         const checkRes = await fetch("/api/canvas-chat", {
@@ -874,16 +874,16 @@ export default function WorkflowBuilder() {
                             body: JSON.stringify({
                                 message: `Evaluate this condition based on the input. Return ONLY the word "TRUE" or "FALSE".\n\nInput: ${result}\nCondition: ${node.data.conditionQuery}`,
                                 variant: "standard",
-                                models: ["gemini-2.0"],
+                                models: ["gemma-3-27b"],
                                 conversationHistory: [{ role: "system", content: "You are a logic evaluator. Output only 'TRUE' or 'FALSE'." }],
                             }),
                         });
                         const checkData = await checkRes.json();
                         const isTrue = checkData.responses?.[0]?.content?.toUpperCase().includes("TRUE");
-                        
+
                         const targetHandle = isTrue ? "true" : "false";
                         const filteredChildren = allChildren.filter(c => c.sourceHandle === targetHandle);
-                        
+
                         for (const child of filteredChildren) {
                             await processNode(child.target, result);
                         }

@@ -7,7 +7,7 @@ First off, thanks for taking the time to contribute! Contributions are what make
 1. **Fork the repository** on GitHub.
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/anishs1207/lead-gen-pipeline.git
+   git clone https://github.com/anishs1207/cortexflow.git
    ```
 3. **Install dependencies**:
    ```bash

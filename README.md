@@ -1,12 +1,12 @@
-# LLM Interfaces
+# CortexFlow
 
 Fine-tuned software experiences for the next era of intelligence.
 
-![LLM Interfaces](images/image-4.png)
+![CortexFlow](images/image-4.png)
 
-![LLM Interfaces](images/image-5.png)
+![CortexFlow](images/image-5.png)
 
-This repository contains a collection of advanced, specialized LLM interfaces designed to enhance productivity and creativity through tailored software experiences.
+This repository contains a collection of advanced, specialized AI interfaces designed to enhance productivity and creativity through tailored software experiences.
 
 ## Projects
 
@@ -56,7 +56,7 @@ Brainrot Explainer Video Generator designed for viral social content creation.
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/anishs1207/lead-gen-chat.git
+   git clone https://github.com/anishs1207/cortexflow.git
    ```
 
 2. **Install dependencies**:
@@ -80,4 +80,4 @@ Brainrot Explainer Video Generator designed for viral social content creation.
 
 ---
 
-&copy; 2026 LLM Interfaces.
+&copy; 2026 CortexFlow.

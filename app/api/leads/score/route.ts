@@ -180,7 +180,7 @@ Return ONLY a valid JSON array:
   }
 
   // Gemini fallback
-  const model2 = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const model2 = genAI.getGenerativeModel({ model: 'gemma-3-27b-it' });
   const result = await model2.generateContent(prompt);
   const text = result.response.text();
   const cleaned = text.replace(/```json\n?|\n?```/g, '').trim();
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
     spreadsheetId,
     leadIds,
     icp = {} as ICPConfig,
-    model = 'google/gemini-2.0-flash-001',
+    model = 'google/gemma-3-27b-it',
   } = body as {
     spreadsheetId?: string;
     leadIds?: string[];

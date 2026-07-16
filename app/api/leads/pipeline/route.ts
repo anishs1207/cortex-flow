@@ -208,7 +208,7 @@ async function stageExtract(
   const errors: string[] = [];
   const allContacts: RawContactData[] = [];
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const model = genAI.getGenerativeModel({ model: 'gemma-3-27b-it' });
 
   // Process in batches of 3 pages to manage token usage
   const BATCH_SIZE = 3;
@@ -353,7 +353,7 @@ OUTPUT: Return ONLY a valid JSON array. Each element:
         'X-Title': 'Lead Generation Pipeline',
       },
       body: JSON.stringify({
-        model: model || 'google/gemini-2.0-flash-001',
+        model: model || 'google/gemma-3-27b-it',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.2,
         response_format: { type: 'json_object' },
@@ -582,7 +582,7 @@ export async function POST(request: NextRequest) {
       contacts,
       query.trim(),
       maxResults,
-      options.enrichModel || 'google/gemini-2.0-flash-001'
+      options.enrichModel || 'google/gemma-3-27b-it'
     );
     stageResults.push(enrichResult);
 

@@ -30,7 +30,8 @@ import {
     Check,
     Lock,
     Unlock,
-    Download
+    Download,
+    MessageSquare
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Markdown } from "@/components/ui/markdown"
@@ -80,7 +81,7 @@ const DEFAULT_NODE_HEIGHT = 500
 const MINI_MAP_SIZE = 150
 
 const AVAILABLE_MODELS = [
-    { id: "gemini-2.0", name: "Gemini 2.0", color: "bg-blue-500/10 border-blue-500/50" },
+    { id: "gemma-3-27b", name: "Gemma 3 27B", color: "bg-blue-500/10 border-blue-500/50" },
     { id: "gpt-4o", name: "GPT-4o", color: "bg-green-500/10 border-green-500/50" },
     { id: "claude-3.5", name: "Claude 3.5", color: "bg-orange-500/10 border-orange-500/50" },
     { id: "deepseek", name: "DeepSeek", color: "bg-purple-500/10 border-purple-500/50" },
@@ -659,7 +660,7 @@ export default function CanvasChatBoard() {
         } else if (nextVariant === "panel-vote") {
             selectedModelIds = AVAILABLE_MODELS.map(m => m.id)
         } else {
-            selectedModelIds = ["gemini-2.0"]
+            selectedModelIds = ["gemma-3-27b"]
         }
 
         // Immediately add user message + a loading placeholder
@@ -954,6 +955,25 @@ export default function CanvasChatBoard() {
         setSelectedNodeId(id)
     }
 
+    /* LOGIC: ADD CHAT NODE */
+    const addChatNode = () => {
+        pushToHistory()
+        const id = generateId()
+        const newNode: ChatNode = {
+            id,
+            variant: "standard",
+            parents: [],
+            messages: [],
+            responses: [],
+            position: { x: -camera.x / camera.scale + 100, y: -camera.y / camera.scale + 100 },
+            width: NODE_WIDTH_STANDARD,
+            height: DEFAULT_NODE_HEIGHT,
+            activeModelIndex: 0
+        }
+        setNodes(prev => [...prev, newNode])
+        setSelectedNodeId(id)
+    }
+
     /* EVENTS */
     // ... Copy existing event handlers from previous step with exact same logic, or slight tweaks
     useEffect(() => {
@@ -1114,6 +1134,9 @@ export default function CanvasChatBoard() {
                 <Button variant="ghost" size="icon" onClick={tidyCanvas} title="Tidy Canvas">
                     <LayoutTemplate className="w-4 h-4" />
                 </Button>
+                <Button variant="ghost" size="icon" onClick={addChatNode} title="Add Chat">
+                    <MessageSquare className="w-4 h-4" />
+                </Button>
                 <Button variant="ghost" size="icon" onClick={addNote} title="Add Note">
                     <StickyNote className="w-4 h-4" />
                 </Button>
@@ -1202,6 +1225,22 @@ export default function CanvasChatBoard() {
                     </svg>
 
                     <div className="pointer-events-auto relative z-10 w-full h-full">
+                        {nodes.length === 0 && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <div className="bg-background/80 backdrop-blur-md border p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 pointer-events-auto animate-in fade-in zoom-in duration-500">
+                                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <MessageSquare className="w-8 h-8 text-primary" />
+                                    </div>
+                                    <div className="text-center">
+                                        <h3 className="text-xl font-bold">Canvas is Empty</h3>
+                                        <p className="text-muted-foreground text-sm">Start a new spatial conversation</p>
+                                    </div>
+                                    <Button onClick={addChatNode} className="rounded-full px-8 gap-2">
+                                        <Plus className="w-4 h-4" /> New Chat
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
                         {nodes.map(node => (
                             <ChatNodeCard
                                 key={node.id}

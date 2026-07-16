@@ -50,6 +50,7 @@ async function transcodeToMP4(
       await new Promise<void>((resolve, reject) => {
         const script = document.createElement("script");
         script.src = "https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js";
+        script.crossOrigin = "anonymous";
         script.onload = () => resolve();
         script.onerror = reject;
         document.head.appendChild(script);

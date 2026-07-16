@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
   const {
     spreadsheetId,
     leadIds,
-    model = 'google/gemini-2.0-flash-001',
+    model = 'google/gemma-3-27b-it',
     rescrape = false,
   } = body as {
     spreadsheetId?: string;

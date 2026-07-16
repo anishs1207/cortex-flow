@@ -175,6 +175,17 @@ export default function UnifiedMachine() {
             open ? "translate-x-0" : "-translate-x-full"
           )}
         >
+          {/* Brand Mark with Glow */}
+          {/* <div className="flex items-center justify-center mb-4">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative px-3 py-1 bg-white dark:bg-zinc-900 ring-1 ring-zinc-900/5 dark:ring-white/10 rounded-lg leading-none flex items-center justify-center">
+                <span className="text-sm font-black tracking-tighter text-zinc-900 dark:text-white">
+                  CORTEX<span className="text-blue-600">FLOW</span>
+                </span>
+              </div>
+            </div>
+          </div> */}
 
           <div className="flex-1 flex flex-col gap-10">
             {machines.map((machine) => {
